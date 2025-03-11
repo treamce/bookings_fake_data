@@ -1,2 +1,2 @@
-# bookings_fake_data
+# Bookings Fake Data
 Creating dummy bookings data
