@@ -20,6 +20,21 @@ rows = 100000
 channels = ['Online','Direct','App']
 products = ['Premier','Quality','Economy']
 countries = ["Ireland","USA", "Canada", "UK", "Germany", "France", "Italy","India", "China", "Japan", "Australia", "Brazil"]
+## Creating a mapping of cities to countries 
+country_to_cities_with_airports = {
+    "Ireland": ["Dublin", "Cork", "Shannon", "Knock","Belfast"],
+    "USA": ["New York", "Los Angeles", "Chicago", "Houston", "San Francisco"],
+    "Canada": ["Toronto", "Vancouver", "Montreal", "Calgary", "Ottawa"],
+    "UK": ["London", "Manchester", "Birmingham", "Liverpool", "Edinburgh"],
+    "Germany": ["Berlin", "Munich", "Frankfurt", "Hamburg", "Cologne"],
+    "France": ["Paris", "Marseille", "Lyon", "Nice", "Toulouse"],
+    "Italy": ["Rome", "Milan", "Venice", "Naples", "Bologna"],
+    "India": ["New Delhi", "Mumbai", "Bangalore", "Chennai", "Hyderabad"],
+    "China": ["Beijing", "Shanghai", "Hong Kong", "Guangzhou", "Shenzhen"],
+    "Japan": ["Tokyo", "Osaka", "Nagoya", "Hiroshima", "Sapporo"],
+    "Australia": ["Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide"],
+    "Brazil": ["Sao Paulo", "Rio de Janeiro", "Brasilia", "Salvador", "Fortaleza"]
+}
 
 ##################
 ## Creating variable weighting for channels 
@@ -57,7 +72,7 @@ def generate_biased_date():
     return datetime(year, month, day, hour, minute)
 
 ###################
-## Creating a booked timestamp
+## Creating a booked timestamp - only want 40% of searches to be booked 
 def booked_timestamp_generate(search_timestamp):
     if random.random() <= 0.4:
         days_to_add = random.randint(1,21)
@@ -75,7 +90,13 @@ data = {
         weights= random_weights,  
         k= rows),
     "Search Timestamp": [generate_biased_date() for _ in range(rows)],
-    "Booked Timestamp": [booked_timestamp_generate(search_timestamp) for search_timestamp in [generate_biased_date() for _ in range(rows)]]
+    "Booked Timestamp": [booked_timestamp_generate(search_timestamp) for search_timestamp in [generate_biased_date() for _ in range(rows)]],
+    "Weight": np.random.uniform(1, 57.2, rows).round(2),
+    "Volume": np.random.uniform(0.1, 43.7, rows).round(2),
+    "Origin Country": [random.choice(list(country_to_cities_with_airports.keys())) for _ in range(rows)],
+    "Origin City": [random.choice(country_to_cities_with_airports[country]) for country in random.choices(list(country_to_cities_with_airports.keys()), k=rows)],
+    "Destination Country": [random.choice(list(country_to_cities_with_airports.keys())) for _ in range(rows)],
+    "Destination City": [random.choice(country_to_cities_with_airports[country]) for country in random.choices(list(country_to_cities_with_airports.keys()), k=rows)]
 }
 
 # Create DataFrame
