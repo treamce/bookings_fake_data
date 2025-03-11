@@ -96,13 +96,15 @@ data = {
     "Origin Country": [random.choice(list(country_to_cities_with_airports.keys())) for _ in range(rows)],
     "Origin City": [random.choice(country_to_cities_with_airports[country]) for country in random.choices(list(country_to_cities_with_airports.keys()), k=rows)],
     "Destination Country": [random.choice(list(country_to_cities_with_airports.keys())) for _ in range(rows)],
-    "Destination City": [random.choice(country_to_cities_with_airports[country]) for country in random.choices(list(country_to_cities_with_airports.keys()), k=rows)]
+    "Destination City": [random.choice(country_to_cities_with_airports[country]) for country in random.choices(list(country_to_cities_with_airports.keys()), k=rows)],
+    "Product": [random.choice(products) for _ in range(rows)],
+    "Price per Kilo": [5 if product == 'Premier' else 2.50 if product == 'Quality' else 0.75 for product in [random.choice(products) for _ in range(rows)]]
 }
 
 # Create DataFrame
 df = pd.DataFrame(data)
 
+# Save to CSV
+df.to_csv("mock_opportunities.csv", index=False)
 
-df.to_csv("mock_opportunities.csv", index =False)
-
-print("Mock dataset created and saved !")
+print("Mock dataset created and saved!")
